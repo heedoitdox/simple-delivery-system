@@ -25,9 +25,8 @@ public class User extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    public static User createUser(Long id, String identifier, String password, String name) {
+    public static User createUser(String identifier, String password, String name) {
         User user = new User();
-        user.id = id;
         user.identifier = identifier;
         user.password = password;
         user.name = name;
