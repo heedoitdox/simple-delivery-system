@@ -14,10 +14,16 @@ import org.springframework.stereotype.Component;
 public class JwtTokenProvider {
 
     private final SecretKey signingKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long expirationTime = 1000 * 60 * 60 * 24;
+    private long expirationTime = 1000 * 60 * 60 * 24;
 
-    public String create(String email) {
-        Claims claims = Jwts.claims().setSubject(email);
+    public JwtTokenProvider(long expirationTime) {
+        this.expirationTime = expirationTime;
+    }
+
+    public JwtTokenProvider() {}
+
+    public String create(String identifier) {
+        Claims claims = Jwts.claims().setSubject(identifier);
         Date now = new Date();
         Date expiration = new Date(now.getTime() + expirationTime);
 
