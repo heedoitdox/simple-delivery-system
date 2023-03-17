@@ -1,10 +1,9 @@
 package heedoitdox.deliverysystem.api;
 
-import heedoitdox.deliverysystem.application.AuthenticationService;
-import heedoitdox.deliverysystem.application.LoginResponse;
-import heedoitdox.deliverysystem.application.UserRequest;
-import heedoitdox.deliverysystem.application.UserService;
+import heedoitdox.deliverysystem.application.*;
+
 import javax.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,9 +25,18 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<LoginResponse> register(
         @Valid @RequestBody final UserRequest request) {
-        final String accessToken = authenticationService.generateAccessToken(request);
+        final String accessToken = authenticationService.generateAccessTokenByRegister(request);
+
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(LoginResponse.createLoginResponse(accessToken));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(
+            @Valid @RequestBody final LoginRequest request) {
+        final String accessToken = authenticationService.generateAccessTokenByLogin(request);
 
         return ResponseEntity.ok().body(LoginResponse.createLoginResponse(accessToken));
     }
-
 }

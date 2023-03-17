@@ -30,14 +30,22 @@ public class Delivery extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private DeliveryStatus status;
 
-    public static Delivery create(Long id, Product product, Long price, LocalDateTime requestedAt,
-        DeliveryStatus deliveryType) {
+    @Embedded
+    private Address address;
+
+    public static Delivery create(
+        Product product,
+        Long price,
+        LocalDateTime requestedAt,
+        DeliveryStatus deliveryType,
+        Address address
+    ) {
         Delivery delivery = new Delivery();
-        delivery.id = id;
         delivery.product = product;
         delivery.price = price;
         delivery.requestedAt = requestedAt;
         delivery.status = deliveryType;
+        delivery.address = address;
 
         return delivery;
     }

@@ -9,6 +9,8 @@ import javax.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 public class AuthenticationService {
@@ -24,13 +26,23 @@ public class AuthenticationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String generateAccessToken(UserRequest request) {
+    public String generateAccessTokenByRegister(UserRequest request) {
         if (userRepository.findByIdentifier(request.getIdentifier()).isPresent()) {
-            throw new RestApiException(UserErrorCode.DUPLICATED_EMAIL);
+            throw new RestApiException(UserErrorCode.DUPLICATED_IDENTIFIER);
         }
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         User savedUser = userRepository.save(request.toEntity(encodedPassword));
 
         return jwtTokenProvider.create(savedUser.getIdentifier());
+    }
+
+    public String generateAccessTokenByLogin(LoginRequest request) {
+        User user = userRepository.findByIdentifier(request.getIdentifier())
+            .orElseThrow(() -> new RestApiException(UserErrorCode.INVALID_IDENTIFIER));
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RestApiException(UserErrorCode.INVALID_PASSWORD);
+        }
+
+        return jwtTokenProvider.create(user.getIdentifier());
     }
 }

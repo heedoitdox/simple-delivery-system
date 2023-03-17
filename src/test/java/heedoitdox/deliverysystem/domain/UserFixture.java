@@ -1,10 +1,13 @@
 package heedoitdox.deliverysystem.domain;
 
+import heedoitdox.deliverysystem.application.LoginRequest;
 import heedoitdox.deliverysystem.application.UserRequest;
 
 import java.math.BigDecimal;
 
 public class UserFixture {
-    public static UserRequest 회원정보요청 = new UserRequest("binzzang810", "123123123", "윤영빈");
-    public static User 회원정보 = User.createUser("binzzang810", "12312312323", "윤영빈");
+
+    public static UserRequest 요청회원정보 = new UserRequest("binzzang810", "abcABC1234!!!", "윤영빈");
+    public static User 회원정보 = User.createUser("binzzang810", "abcABC1234!!!", "윤영빈");
+    public static LoginRequest 요청로그인정보 = new LoginRequest("binzzang810", "abcABC1234!!!");
 }
