@@ -16,6 +16,12 @@ public class UserRequest {
     @NotBlank(message = "이름은 공백일 수 없습니다.")
     private String name;
 
+    public UserRequest(String identifier, String password, String name) {
+        this.identifier = identifier;
+        this.password = password;
+        this.name = name;
+    }
+
     public User toEntity(String encodedPassword) {
         return User.createUser(identifier, encodedPassword, name);
     }
