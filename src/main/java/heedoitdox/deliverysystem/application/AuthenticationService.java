@@ -6,6 +6,7 @@ import heedoitdox.deliverysystem.domain.UserRepository;
 import heedoitdox.deliverysystem.exception.RestApiException;
 import heedoitdox.deliverysystem.security.JwtTokenProvider;
 import javax.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,18 +14,12 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class AuthenticationService {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
-
-    public AuthenticationService(UserRepository userRepository, JwtTokenProvider jwtTokenProvider,
-        PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     public String generateAccessTokenByRegister(UserRequest request) {
         if (userRepository.findByIdentifier(request.getIdentifier()).isPresent()) {

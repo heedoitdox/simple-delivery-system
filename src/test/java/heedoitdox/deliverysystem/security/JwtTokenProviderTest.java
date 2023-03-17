@@ -16,7 +16,7 @@ class JwtTokenProviderTest {
         JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(INVALID_EXPIRATION_TIME);
         String token = jwtTokenProvider.create("binzzang810");
 
-        Boolean actual = jwtTokenProvider.isValid(token);
+        boolean actual = jwtTokenProvider.isValid(token);
 
         assertThat(actual).isEqualTo(false);
     }

@@ -1,6 +1,8 @@
 package heedoitdox.deliverysystem.exception;
 
 import heedoitdox.deliverysystem.exception.ErrorResponse.ValidationError;
+import heedoitdox.deliverysystem.security.AuthenticationFailedException;
+import heedoitdox.deliverysystem.security.UnprocessableException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -39,15 +41,29 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleAllException(Exception ex) {
-        log.warn("handleAllException", ex);
+        log.warn("handleAllException: ", ex);
         ErrorCode errorCode = CommonErrorCode.INTERNAL_SERVER_ERROR;
         return handleExceptionInternal(errorCode);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException e) {
-        log.warn("handleIllegalArgument", e);
+    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException e) {
+        log.warn("handleIllegalArgumentException: ", e);
         ErrorCode errorCode = CommonErrorCode.INVALID_PARAMETER;
+        return handleExceptionInternal(errorCode, e.getMessage());
+    }
+
+    @ExceptionHandler(AuthenticationFailedException.class)
+    public ResponseEntity<Object> handleUnauthorizedException(AuthenticationFailedException e) {
+        log.warn("handleUnauthorizedException: ", e);
+        ErrorCode errorCode = CommonErrorCode.UNAUTHORIZED;
+        return handleExceptionInternal(errorCode, e.getMessage());
+    }
+
+    @ExceptionHandler(UnprocessableException.class)
+    public ResponseEntity<Object> handleUnprocessableException(AuthenticationFailedException e) {
+        log.warn("handleUnauthorizedException: ", e);
+        ErrorCode errorCode = CommonErrorCode.UNPROCESSABLE_ENTITY;
         return handleExceptionInternal(errorCode, e.getMessage());
     }
 

@@ -11,7 +11,9 @@ public enum CommonErrorCode implements ErrorCode {
     INTERNAL_SERVER_ERROR(
         HttpStatus.INTERNAL_SERVER_ERROR,
         "Unexpected internal server error"
-    );
+    ),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "Unauthorized"),
+    UNPROCESSABLE_ENTITY(HttpStatus.UNPROCESSABLE_ENTITY, "Unprocessable Entity");
 
     private final HttpStatus httpStatus;
     private final String message;
