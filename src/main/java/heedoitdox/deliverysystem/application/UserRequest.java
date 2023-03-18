@@ -23,6 +23,6 @@ public class UserRequest {
     }
 
     public User toEntity(String encodedPassword) {
-        return User.createUser(identifier, encodedPassword, name);
+        return User.create(identifier, encodedPassword, name);
     }
 }

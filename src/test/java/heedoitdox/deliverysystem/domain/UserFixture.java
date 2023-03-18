@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 public class UserFixture {
 
     public static UserRequest 요청회원정보 = new UserRequest("binzzang810", "abcABC1234!!!", "윤영빈");
-    public static User 회원정보 = User.createUser("binzzang810", "abcABC1234!!!", "윤영빈");
+    public static User 회원정보 = User.create(1L, "binzzang810", "abcABC1234!!!", "윤영빈");
+    public static User 회원정보2 = User.create(2L, "binzzang8102", "abcABC1234!!!", "윤영빈");
     public static LoginRequest 요청로그인정보 = new LoginRequest("binzzang810", "abcABC1234!!!");
 }

@@ -1,8 +1,15 @@
 package heedoitdox.deliverysystem.application;
 
+import static heedoitdox.deliverysystem.domain.DeliveryErrorCode.UNABLE_TO_UPDATE_ADDRESS;
+import static heedoitdox.deliverysystem.exception.CommonErrorCode.NOT_FOUND;
+import static heedoitdox.deliverysystem.exception.CommonErrorCode.PERMISSION_DENIED;
+
 import heedoitdox.deliverysystem.domain.Delivery;
 import heedoitdox.deliverysystem.domain.DeliveryRepository;
 import heedoitdox.deliverysystem.domain.User;
+import heedoitdox.deliverysystem.domain.UserErrorCode;
+import heedoitdox.deliverysystem.exception.CommonErrorCode;
+import heedoitdox.deliverysystem.exception.RestApiException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -33,8 +40,9 @@ public class DeliveryService {
         DeliveryListRequest request
     ) {
         LocalDate endDate;
-        if(request.getEndDate() == null) endDate = request.getStartDate();
-        else {
+        if (request.getEndDate() == null) {
+            endDate = request.getStartDate();
+        } else {
             if (Period.between(request.getStartDate(), request.getEndDate()).getDays() > 2L) {
                 throw new IllegalArgumentException("최대 3일까지의 기간을 조회할 수 있어요.");
             }
@@ -53,5 +61,18 @@ public class DeliveryService {
             deliveryList.stream().map(DeliveryListResponse::new).collect(Collectors.toList());
 
         return new PageImpl<>(response, pageable, deliveryList.getTotalElements());
+    }
+
+    public void updateAddress(Long id, User user, DeliveryAddressRequest request) {
+        Delivery delivery = deliveryRepository.findById(id)
+            .orElseThrow(() -> new RestApiException(NOT_FOUND));
+        if (!delivery.isSameUser(user)) {
+            throw new RestApiException(PERMISSION_DENIED);
+        }
+        if (!delivery.updatableAddress()) {
+            throw new RestApiException(UNABLE_TO_UPDATE_ADDRESS);
+        }
+
+        delivery.changeAddress(request.getMainAddress(), request.getSubAddress());
     }
 }

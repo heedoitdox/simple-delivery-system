@@ -37,7 +37,8 @@ public class Delivery extends BaseEntity {
         Long price,
         LocalDateTime requestedAt,
         DeliveryStatus deliveryType,
-        Address address
+        Address address,
+        User user
     ) {
         Delivery delivery = new Delivery();
         delivery.id = 0L;
@@ -45,7 +46,20 @@ public class Delivery extends BaseEntity {
         delivery.requestedAt = requestedAt;
         delivery.status = deliveryType;
         delivery.address = address;
+        delivery.user = user;
 
         return delivery;
+    }
+
+    public boolean isSameUser(User user) {
+        return this.user.equals(user);
+    }
+
+    public boolean updatableAddress() {
+        return this.status == DeliveryStatus.REQUESTED;
+    }
+
+    public void changeAddress(String mainAddress, String subAddress) {
+        this.address = Address.create(mainAddress, subAddress);
     }
 }

@@ -1,6 +1,8 @@
 package heedoitdox.deliverysystem.api;
 
 import static heedoitdox.deliverysystem.domain.DeliveryFixture.deliveryListResponseOf;
+import static heedoitdox.deliverysystem.domain.DeliveryFixture.요청_배달주소;
+import static heedoitdox.deliverysystem.domain.UserFixture.요청회원정보;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -11,6 +13,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,6 +27,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class DeliveryControllerTest extends RestControllerTest {
@@ -86,6 +91,24 @@ class DeliveryControllerTest extends RestControllerTest {
                     fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN)
                         .description("정렬안됨 여부"),
                     fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN).description("비어있음 여부")
+                )));
+    }
+
+    @Test
+    void 배달_주소_수정_성공() throws Exception {
+        mockMvc.perform(patch("/api/delivery/1")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer <accessToken>")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(요청_배달주소)))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("patch-delivery",
+                requestHeaders(
+                    headerWithName("Authorization").description("인증 토큰")
+                ),
+                PayloadDocumentation.requestFields(
+                    PayloadDocumentation.fieldWithPath("mainAddress").description("메인 주소"),
+                    PayloadDocumentation.fieldWithPath("subAddress").description("상세 주소")
                 )));
     }
 }
