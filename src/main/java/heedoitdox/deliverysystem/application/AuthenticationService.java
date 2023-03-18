@@ -7,6 +7,7 @@ import heedoitdox.deliverysystem.exception.RestApiException;
 import heedoitdox.deliverysystem.security.JwtTokenProvider;
 import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthenticationService {
 
     private final UserRepository userRepository;

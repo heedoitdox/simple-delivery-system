@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static heedoitdox.deliverysystem.domain.UserFixture.요청로그인정보;
@@ -30,6 +29,7 @@ class UserControllerTest extends RestControllerTest {
         String validAccessToken = "Bearer <token>";
         when(authenticationService.generateAccessTokenByRegister(any()))
             .thenReturn(validAccessToken);
+
         mockMvc.perform(post("/api/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(요청회원정보)))

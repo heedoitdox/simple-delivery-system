@@ -17,6 +17,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 @RequiredArgsConstructor
 public class LoginUserResolver implements HandlerMethodArgumentResolver {
+    private static final String AUTHENTICATION_EXCEPTION_MESSAGE = "올바른 인증 정보가 아니에요.";
 
     private static final String BEARER = "Bearer";
 
@@ -26,8 +27,7 @@ public class LoginUserResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-//        return parameter.hasParameterAnnotation(LoginUser.class);
-        return true;
+        return parameter.hasParameterAnnotation(LoginUser.class);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class LoginUserResolver implements HandlerMethodArgumentResolver {
     ) {
         String token = extractBearerToken(webRequest);
         if (Boolean.FALSE.equals(jwtTokenProvider.isValid(token))) {
-            throw new AuthenticationFailedException();
+            throw new AuthenticationFailedException(AUTHENTICATION_EXCEPTION_MESSAGE);
         }
         String identifier = jwtTokenProvider.getSubject(token);
 
@@ -50,11 +50,11 @@ public class LoginUserResolver implements HandlerMethodArgumentResolver {
     private String extractBearerToken(NativeWebRequest request) {
         String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authorization == null) {
-            throw new AuthenticationFailedException();
+            throw new AuthenticationFailedException(AUTHENTICATION_EXCEPTION_MESSAGE);
         }
         Map.Entry<String, String> splitToken = splitTokenFormat(authorization);
         if (!Objects.equals(splitToken.getKey(), BEARER)) {
-            throw new AuthenticationFailedException();
+            throw new AuthenticationFailedException(AUTHENTICATION_EXCEPTION_MESSAGE);
         }
 
         return splitToken.getValue();
@@ -65,7 +65,7 @@ public class LoginUserResolver implements HandlerMethodArgumentResolver {
             String[] tokenFormat = authorization.split(" ");
             return new SimpleEntry<>(tokenFormat[0], tokenFormat[1]);
         } catch (IndexOutOfBoundsException e) {
-            throw new AuthenticationFailedException();
+            throw new AuthenticationFailedException(AUTHENTICATION_EXCEPTION_MESSAGE);
         }
     }
 }

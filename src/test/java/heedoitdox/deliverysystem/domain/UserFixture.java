@@ -3,6 +3,7 @@ package heedoitdox.deliverysystem.domain;
 import heedoitdox.deliverysystem.application.LoginRequest;
 import heedoitdox.deliverysystem.application.UserRequest;
 
+import heedoitdox.deliverysystem.domain.User;
 import java.math.BigDecimal;
 
 public class UserFixture {

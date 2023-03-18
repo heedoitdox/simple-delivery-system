@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -30,6 +31,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("handleMethodArgumentNotValid: " + e.getMessage());
         ErrorCode errorCode = CommonErrorCode.INVALID_PARAMETER;
         return handleExceptionInternal(e, errorCode);
+    }
+
+    @ExceptionHandler(RequestParamBindException.class)
+    protected ResponseEntity<Object> handleRequestParamBindException(RequestParamBindException e) {
+        log.error("handleRequestParamBindException: " + e.getErrorCode().getMessage());
+        ErrorCode errorCode = e.getErrorCode();
+        return handleExceptionInternal(e.getErrors(), errorCode);
     }
 
     @ExceptionHandler(RestApiException.class)
@@ -87,6 +95,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private ErrorResponse makeErrorResponse(BindException e, ErrorCode errorCode) {
         List<ValidationError> validationErrorList = e.getBindingResult()
             .getFieldErrors()
+            .stream()
+            .map(ErrorResponse.ValidationError::of)
+            .collect(Collectors.toList());
+
+        return ErrorResponse.builder()
+            .code(errorCode.name())
+            .message(errorCode.getMessage())
+            .errors(validationErrorList)
+            .build();
+    }
+
+    private ResponseEntity<Object> handleExceptionInternal(List<FieldError> fieldErrors, ErrorCode errorCode) {
+        return ResponseEntity.status(errorCode.getHttpStatus())
+            .body(makeErrorResponse(fieldErrors, errorCode));
+    }
+
+    private ErrorResponse makeErrorResponse(List<FieldError> fieldErrors, ErrorCode errorCode) {
+        List<ValidationError> validationErrorList = fieldErrors
             .stream()
             .map(ErrorResponse.ValidationError::of)
             .collect(Collectors.toList());

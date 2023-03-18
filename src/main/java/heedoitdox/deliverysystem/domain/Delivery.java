@@ -18,8 +18,8 @@ public class Delivery extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "price")
     private Long price;
@@ -34,14 +34,13 @@ public class Delivery extends BaseEntity {
     private Address address;
 
     public static Delivery create(
-        Product product,
         Long price,
         LocalDateTime requestedAt,
         DeliveryStatus deliveryType,
         Address address
     ) {
         Delivery delivery = new Delivery();
-        delivery.product = product;
+        delivery.id = 0L;
         delivery.price = price;
         delivery.requestedAt = requestedAt;
         delivery.status = deliveryType;

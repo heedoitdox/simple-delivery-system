@@ -5,5 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class AuthenticationFailedException extends RuntimeException {}
+public class AuthenticationFailedException extends RuntimeException {
+    private final String message;
+}
 

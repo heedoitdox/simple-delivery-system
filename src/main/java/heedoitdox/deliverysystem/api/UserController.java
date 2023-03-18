@@ -3,6 +3,7 @@ package heedoitdox.deliverysystem.api;
 import heedoitdox.deliverysystem.application.*;
 
 import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,15 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/users")
 @RestController
+@RequiredArgsConstructor
 public class UserController {
-
-    private final UserService userService;
     private final AuthenticationService authenticationService;
-
-    public UserController(UserService userService, AuthenticationService authenticationService) {
-        this.userService = userService;
-        this.authenticationService = authenticationService;
-    }
 
     @PostMapping("/register")
     public ResponseEntity<LoginResponse> register(
@@ -29,7 +24,7 @@ public class UserController {
 
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(LoginResponse.createLoginResponse(accessToken));
+            .body(new LoginResponse(accessToken));
     }
 
     @PostMapping("/login")
@@ -37,6 +32,6 @@ public class UserController {
             @Valid @RequestBody final LoginRequest request) {
         final String accessToken = authenticationService.generateAccessTokenByLogin(request);
 
-        return ResponseEntity.ok().body(LoginResponse.createLoginResponse(accessToken));
+        return ResponseEntity.ok().body(new LoginResponse(accessToken));
     }
 }

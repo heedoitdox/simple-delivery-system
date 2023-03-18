@@ -4,12 +4,12 @@ import heedoitdox.deliverysystem.domain.User;
 import heedoitdox.deliverysystem.domain.UserRepository;
 import java.util.Optional;
 import javax.transaction.Transactional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
