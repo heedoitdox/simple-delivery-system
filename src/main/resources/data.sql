@@ -1,7 +1,7 @@
 INSERT INTO user(id, created_at, updated_at, identifier, name, password)
-VALUES(1,CURRENT_TIMESTAMP(6),NULL,'tester1@barogo.com','테스터1', '{bcrypt}$2a$10$bBETTP7kGKw7XUS2tWo6buGbbRStGHjzPdpa3CZIj1zzJmzY5DTdW');
+VALUES(1,CURRENT_TIMESTAMP(6),NULL,'tester1@test.com','테스터1', '{bcrypt}$2a$10$mvj90YPTR7O6WDNgrM.hbu5OlJsdDA6Mvu7BFKVmdO6Ej37Y1Kd3u');
 INSERT INTO user(id, created_at, updated_at, identifier, name, password)
-VALUES(2,CURRENT_TIMESTAMP(6),NULL,'tester2@barogo.com','테스터2', '{bcrypt}$2a$10$bBETTP7kGKw7XUS2tWo6buGbbRStGHjzPdpa3CZIj1zzJmzY5DTdW');
+VALUES(2,CURRENT_TIMESTAMP(6),NULL,'tester2@test.com','테스터2', '{bcrypt}$2a$10$mvj90YPTR7O6WDNgrM.hbu5OlJsdDA6Mvu7BFKVmdO6Ej37Y1Kd3u');
 
 INSERT INTO delivery(id, created_at, updated_at, main_address, sub_address, price, requested_at, status, user_id)
 VALUES(1,CURRENT_TIMESTAMP(6),NULL,'서울특별시 관악구','도림천빌라', 25000, '2023-03-17 15:30:23', 'COMPLETED', 1);
