@@ -10,9 +10,12 @@ spring:
     defer-datasource-initialization: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3309/request_vacation
+    url: jdbc:mysql://127.0.0.1:3309/simple_delivery_system
     username: root
     password: root
+  sql:
+    init:
+      mode: always # always # never
 
 logging:
   level:
