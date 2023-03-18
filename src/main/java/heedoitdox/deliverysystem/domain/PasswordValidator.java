@@ -1,7 +1,9 @@
 package heedoitdox.deliverysystem.domain;
 
 import java.util.regex.Pattern;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PasswordValidator {
     private static final int MIN_SIZE = 12;
     private static final int MAX_SIZE = 25;
