@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Table(name = "delivery", indexes = @Index(name = "idx_delivery_requestedAt", columnList = "requested_at"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Delivery extends BaseEntity {
 
